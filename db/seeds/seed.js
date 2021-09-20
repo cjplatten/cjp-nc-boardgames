@@ -1,4 +1,7 @@
+const format = require("pg-format");
 const db = require("../connection.js");
+const { formatCategoryData, formatUserData } = require("../utils/data-manipulation.js");
+
 
 const seed = (data) => {
   const { categoryData, commentData, reviewData, userData } = data;
@@ -34,7 +37,7 @@ const seed = (data) => {
       CREATE TABLE users (
           username VARCHAR(80) PRIMARY KEY,
           avatar_URL VARCHAR(255) NOT NULL,
-          name VARCHAR(80) NOT NULL
+          name VARCHAR(150) NOT NULL
         );
       `);
     })
@@ -45,7 +48,7 @@ const seed = (data) => {
       return db.query(`
       CREATE TABLE reviews (
         review_id SERIAL PRIMARY KEY,
-        title VARCHAR (100) NOT NULL,
+        title VARCHAR (150) NOT NULL,
         review_body TEXT NOT NULL,
         designer VARCHAR(150),
         review_img_url VARCHAR(255) DEFAULT 'https://images.pexels.com/photos/163064/play-stone-network-networked-interactive-163064.jpeg',
@@ -73,7 +76,41 @@ const seed = (data) => {
     })
     .then(() => {
       console.log("Comments table created.");
-    });
+    })
+    .then(() => {
+      const queryStr = format(
+      `
+      INSERT INTO categories (
+        slug, description
+        )
+        VALUES
+        %L
+        RETURNING *;
+        `,
+        formatCategoryData(categoryData)
+      );
+        return db.query(queryStr);
+    })
+    .then((categoryInsertResults) => {
+      console.log(categoryInsertResults.rows)
+    })
+    .then(() => {
+      const queryStr = format(
+      `
+      INSERT INTO users (
+        username, avatar_url, name
+        )
+        VALUES
+        %L
+        RETURNING *;
+        `,
+        formatUserData(userData)
+      );
+        return db.query(queryStr);
+    })
+    .then((userInsertResults) => {
+      console.log(userInsertResults.rows)
+    })
 };
 
 module.exports = seed;

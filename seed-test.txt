@@ -1,0 +1,71 @@
+
+> be-nc-games@1.0.0 seed
+> node ./db/seeds/run-seed.js
+
+All tables dropped.
+Categories table created.
+Users table created.
+Reviews table created.
+Comments table created.
+[
+  {
+    slug: 'strategy',
+    description: 'Strategy-focused board games that prioritise limited-randomness'
+  },
+  {
+    slug: 'hidden-roles',
+    description: "One or more players around the table have a secret, and the rest of you need to figure out who! Players attempt to uncover each other's hidden role"
+  },
+  {
+    slug: 'dexterity',
+    description: 'Games involving physical skill, something like Gladiators, for Board Games!'
+  },
+  {
+    slug: 'push-your-luck',
+    description: 'Games that allow you to take bigger risks to achieve increasingly valuable rewards - or to decide to keep what you’ve got before you lose everything.'
+  },
+  {
+    slug: 'roll-and-write',
+    description: 'Roll some dice and decide how to use the outcome, writing it into a personal scoring sheet. '
+  },
+  {
+    slug: 'deck-building',
+    description: 'Games where players construct their own deck as a main element of the gameplay'
+  },
+  {
+    slug: 'engine-building',
+    description: 'Games where players construct unique points-gaining engines main element of the gameplay'
+  }
+]
+[
+  {
+    username: 'tickle122',
+    avatar_url: 'https://www.spiritsurfers.net/monastery/wp-content/uploads/_41500270_mrtickle.jpg',
+    name: 'Tom Tickle'
+  },
+  {
+    username: 'grumpy19',
+    avatar_url: 'https://www.tumbit.com/profile-image/4/original/mr-grumpy.jpg',
+    name: 'Paul Grump'
+  },
+  {
+    username: 'happyamy2016',
+    avatar_url: 'https://vignette1.wikia.nocookie.net/mrmen/images/7/7f/Mr_Happy.jpg/revision/latest?cb=20140102171729',
+    name: 'Amy Happy'
+  },
+  {
+    username: 'cooljmessy',
+    avatar_url: 'https://i.imgur.com/WfX0Neu.jpg',
+    name: 'Peter Messy'
+  },
+  {
+    username: 'weegembump',
+    avatar_url: 'https://www.upandrunning.co.uk/media/catalog/product/cache/1/image/650x/040ec09b1e35df139433887a97daa66f/m/r/mr-bump.jpg',
+    name: 'Gemma Bump'
+  },
+  {
+    username: 'jessjelly',
+    avatar_url: 'https://s-media-cache-ak0.pinimg.com/564x/39/62/ec/3962eca164e60cf46f979c1f57d4078b.jpg',
+    name: 'Jess Jelly'
+  }
+]
