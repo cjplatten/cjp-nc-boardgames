@@ -1,7 +1,13 @@
 const format = require("pg-format");
 const db = require("../connection.js");
-const { formatCategoryData, formatUserData } = require("../utils/data-manipulation.js");
-
+const {
+  formatCategoryData,
+  formatUserData,
+  formatReviewData,
+  formatReviewOwnerData,
+  createUserRef,
+  createCategoryRef,
+} = require("../utils/data-manipulation.js");
 
 const seed = (data) => {
   const { categoryData, commentData, reviewData, userData } = data;
@@ -79,7 +85,7 @@ const seed = (data) => {
     })
     .then(() => {
       const queryStr = format(
-      `
+        `
       INSERT INTO categories (
         slug, description
         )
@@ -89,14 +95,31 @@ const seed = (data) => {
         `,
         formatCategoryData(categoryData)
       );
-        return db.query(queryStr);
+      return db.query(queryStr);
     })
-    .then((categoryInsertResults) => {
-      console.log(categoryInsertResults.rows)
+    // .then((categoryInsertResults) => {
+    //   console.log(categoryInsertResults.rows);
+    //   const categoryRef = createCategoryRef(categoryInsertResults.rows);
+
+    //   const queryStr = format(
+    //     `
+    //     INSERT INTO reviews (
+    //       title, review_body, designer, review_img_url, votes, category, created_at
+    //       )
+    //       VALUES
+    //       %L
+    //       RETURNING *;
+    //       `,
+    //     formatReviewData(reviewData, categoryRef)
+    //   );
+    //   return db.query(queryStr);
+    // })
+    .then((reviewInsertResults) => {
+      console.log(reviewInsertResults.rows);
     })
     .then(() => {
       const queryStr = format(
-      `
+        `
       INSERT INTO users (
         username, avatar_url, name
         )
@@ -106,11 +129,42 @@ const seed = (data) => {
         `,
         formatUserData(userData)
       );
-        return db.query(queryStr);
+      return db.query(queryStr);
     })
-    .then((userInsertResults) => {
-      console.log(userInsertResults.rows)
+    .then(() => {
+      const queryStr = format(
+        `
+        INSERT INTO reviews (
+          title, review_body, designer, review_img_url, votes, category, owner
+          )
+          VALUES
+          %L
+          RETURNING *;
+          `,
+        formatReviewData(reviewData, )
+      );
+      return db.query(queryStr);
     })
+    // .then((userInsertResults) => {
+    //   console.log(userInsertResults.rows);
+    //   const userRef = createUserRef(userInsertResults.rows);
+
+    //   const queryStr = format(
+    //     `
+    //   INSERT INTO reviews (
+    //     owner
+    //     )
+    //     VALUES
+    //     %L
+    //     RETURNING *;
+    //     `,
+    //     formatReviewOwnerData(reviewData, userRef)
+    //   );
+    //   return db.query(queryStr);
+    // })
+    .then((reviewInsertResults) => {
+      console.log(reviewInsertResults.rows);
+    });
 };
 
 module.exports = seed;
