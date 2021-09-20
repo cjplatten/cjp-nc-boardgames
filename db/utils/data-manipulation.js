@@ -49,7 +49,19 @@ exports.formatReviewData = (reviewData, categoryRef) => {
 //   return formattedReviewData;
 // };
 
-// exports.createUserRef = (userRows) => {};
+exports.createReviewRef = (reviewRows) => {};
+
+exports.formatCommentData = (commentData, reviewRows) => {
+    const formattedCommentData = commentData.map((comment) => {
+            return [
+              comment.author,
+              comment.review_id,
+              comment.votes,
+              comment.body,
+            ];
+          });
+          return formattedCommentData;
+}
 
 // exports.formatReviewOwnerData = (reviewData, userRef) => {
 //     const formattedReviewOwnerData = reviewData.map((review) => {

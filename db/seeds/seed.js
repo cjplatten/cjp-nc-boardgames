@@ -4,9 +4,8 @@ const {
   formatCategoryData,
   formatUserData,
   formatReviewData,
-  formatReviewOwnerData,
-  createUserRef,
-  createCategoryRef,
+  createReviewRef,
+  formatCommentData,
 } = require("../utils/data-manipulation.js");
 
 const seed = (data) => {
@@ -97,25 +96,8 @@ const seed = (data) => {
       );
       return db.query(queryStr);
     })
-    // .then((categoryInsertResults) => {
-    //   console.log(categoryInsertResults.rows);
-    //   const categoryRef = createCategoryRef(categoryInsertResults.rows);
-
-    //   const queryStr = format(
-    //     `
-    //     INSERT INTO reviews (
-    //       title, review_body, designer, review_img_url, votes, category, created_at
-    //       )
-    //       VALUES
-    //       %L
-    //       RETURNING *;
-    //       `,
-    //     formatReviewData(reviewData, categoryRef)
-    //   );
-    //   return db.query(queryStr);
-    // })
-    .then((reviewInsertResults) => {
-      console.log(reviewInsertResults.rows);
+    .then((categoryInsertResults) => {
+      console.log(categoryInsertResults.rows);
     })
     .then(() => {
       const queryStr = format(
@@ -131,6 +113,9 @@ const seed = (data) => {
       );
       return db.query(queryStr);
     })
+    .then((userInsertResults) => {
+      console.log(userInsertResults.rows);
+    })
     .then(() => {
       const queryStr = format(
         `
@@ -141,29 +126,29 @@ const seed = (data) => {
           %L
           RETURNING *;
           `,
-        formatReviewData(reviewData, )
+        formatReviewData(reviewData)
       );
       return db.query(queryStr);
     })
-    // .then((userInsertResults) => {
-    //   console.log(userInsertResults.rows);
-    //   const userRef = createUserRef(userInsertResults.rows);
-
-    //   const queryStr = format(
-    //     `
-    //   INSERT INTO reviews (
-    //     owner
-    //     )
-    //     VALUES
-    //     %L
-    //     RETURNING *;
-    //     `,
-    //     formatReviewOwnerData(reviewData, userRef)
-    //   );
-    //   return db.query(queryStr);
-    // })
     .then((reviewInsertResults) => {
       console.log(reviewInsertResults.rows);
+    })
+    .then(() => {
+      const queryStr = format(
+        `
+        INSERT INTO comments (
+          author, review_id, votes, body
+          )
+          VALUES
+          %L
+          RETURNING *;
+          `,
+        formatCommentData(commentData)
+      );
+      return db.query(queryStr);
+    })
+    .then((commentInsertResults) => {
+      console.log(commentInsertResults.rows);
     });
 };
 
