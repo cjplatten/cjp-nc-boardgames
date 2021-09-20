@@ -66,7 +66,8 @@ const seed = (data) => {
         author TEXT REFERENCES users(username) NOT NULL,
         review_id INT REFERENCES reviews(review_id) NOT NULL,
         votes INT DEFAULT 0,
-        created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP 
+        created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP ,
+        body TEXT NOT NULL
       )
       `);
     })
