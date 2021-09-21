@@ -23,9 +23,9 @@ const seed = (data) => {
     .then(() => {
       return db.query(`DROP TABLE IF EXISTS categories;`);
     })
-    .then(() => {
-      console.log("All tables dropped.");
-    })
+    // .then(() => {
+    //   console.log("All tables dropped.");
+    // })
     .then(() => {
       return db.query(`
       CREATE TABLE categories (
@@ -34,9 +34,9 @@ const seed = (data) => {
       );
       `);
     })
-    .then(() => {
-      console.log("Categories table created.");
-    })
+    // .then(() => {
+    //   console.log("Categories table created.");
+    // })
     .then(() => {
       return db.query(`
       CREATE TABLE users (
@@ -46,9 +46,9 @@ const seed = (data) => {
         );
       `);
     })
-    .then(() => {
-      console.log("Users table created.");
-    })
+    // .then(() => {
+    //   console.log("Users table created.");
+    // })
     .then(() => {
       return db.query(`
       CREATE TABLE reviews (
@@ -64,9 +64,9 @@ const seed = (data) => {
       )
       `);
     })
-    .then(() => {
-      console.log("Reviews table created.");
-    })
+    // .then(() => {
+    //   console.log("Reviews table created.");
+    // })
     .then(() => {
       return db.query(`
       CREATE TABLE comments (
@@ -79,9 +79,9 @@ const seed = (data) => {
       )
       `);
     })
-    .then(() => {
-      console.log("Comments table created.");
-    })
+    // .then(() => {
+    //   console.log("Comments table created.");
+    // })
     .then(() => {
       const queryStr = format(
         `
@@ -96,9 +96,9 @@ const seed = (data) => {
       );
       return db.query(queryStr);
     })
-    .then((categoryInsertResults) => {
-      console.log(categoryInsertResults.rows);
-    })
+    // .then((categoryInsertResults) => {
+    //   console.log(categoryInsertResults.rows);
+    // })
     .then(() => {
       const queryStr = format(
         `
@@ -113,9 +113,9 @@ const seed = (data) => {
       );
       return db.query(queryStr);
     })
-    .then((userInsertResults) => {
-      console.log(userInsertResults.rows);
-    })
+    // .then((userInsertResults) => {
+    //   console.log(userInsertResults.rows);
+    // })
     .then(() => {
       const queryStr = format(
         `
@@ -130,9 +130,9 @@ const seed = (data) => {
       );
       return db.query(queryStr);
     })
-    .then((reviewInsertResults) => {
-      console.log(reviewInsertResults.rows);
-    })
+    // .then((reviewInsertResults) => {
+    //   console.log(reviewInsertResults.rows);
+    // })
     .then(() => {
       const queryStr = format(
         `
@@ -147,9 +147,12 @@ const seed = (data) => {
       );
       return db.query(queryStr);
     })
-    .then((commentInsertResults) => {
-      console.log(commentInsertResults.rows);
-    });
+    // .then((commentInsertResults) => {
+    //   console.log(commentInsertResults.rows);
+    // });
+    .then(() => {
+      console.log('Seed complete')
+    })
 };
 
 module.exports = seed;

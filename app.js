@@ -1,6 +1,6 @@
 const express = require("express");
-const { handleServerErrors } = require("./errors/errors.js");
 const apiRouter = require("./routes/api-router.js");
+const { handleServerErrors } = require("./errors/errors.js");
 
 const app = express();
 app.use(express.json());
