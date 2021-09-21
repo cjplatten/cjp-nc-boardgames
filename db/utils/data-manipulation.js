@@ -13,7 +13,7 @@ exports.formatUserData = (userData) => {
   return formattedUserData;
 };
 
-exports.formatReviewData = (reviewData, categoryRef) => {
+exports.formatReviewData = (reviewData) => {
   const formattedReviewData = reviewData.map((review) => {
     return [
       review.title,
