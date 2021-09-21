@@ -1,4 +1,4 @@
-const { formatCategoryData, formatUserData, formatReviewData } = require("../db/utils/data-manipulation");
+const { formatCategoryData, formatUserData, formatReviewData, formatCommentData } = require("../db/utils/data-manipulation");
 
 
 describe('formatCategoryData', () => {
@@ -82,7 +82,7 @@ describe('formatUserData', () => {
     });
 })
 
-describe.only('formatReviewData', () => {
+describe('formatReviewData', () => {
     test('returns empty array when passed no data', () => {
         const reviewData = [];
         const actual = formatReviewData(reviewData);
@@ -116,7 +116,7 @@ describe.only('formatReviewData', () => {
                 review_img_url: 'imagesite.co.uk/awesrdtfguhyji',
                 votes: 4,
                 category: 'strategy',
-                owner: '',
+                owner: 'ghost22',
             }
         ];
         const expected = [
@@ -127,7 +127,7 @@ describe.only('formatReviewData', () => {
                 review_img_url: 'imagesite.co.uk/awesrdtfguhyji',
                 votes: 4,
                 category: 'strategy',
-                owner: '',
+                owner: 'ghost22',
             }
         ];
         
@@ -136,3 +136,48 @@ describe.only('formatReviewData', () => {
     });
 })
 
+
+describe('formatCommentData', () => {
+    test('returns empty array when passed no data', () => {
+        const commentData = [];
+        const actual = formatCommentData(commentData);
+        const expected = [];
+
+        expect(actual).toEqual(expected);
+    });
+    test('returns nested arrays in the order (author, review_id, votes, body)', () => {
+        const commentData = [
+            {
+              author: 'ghost22',
+              review_id: 35,
+              votes: 3,
+              body: 'thx for the votes',
+            }
+        ];
+        const actual = formatCommentData(commentData);
+        const expected = [['ghost22', 35, 3, 'thx for the votes']];
+
+        expect(actual).toEqual(expected);
+    });
+    test('does not mutate the original commentData', () => {
+        const commentData = [
+            {
+                author: 'ghost22',
+                review_id: 35,
+                votes: 3,
+                body: 'thx for the votes',
+              }
+        ];
+        const expected = [
+            {
+                author: 'ghost22',
+                review_id: 35,
+                votes: 3,
+                body: 'thx for the votes',
+              }
+        ];
+        
+        formatCommentData(commentData);
+        expect(commentData).toEqual(expected);
+    });
+})

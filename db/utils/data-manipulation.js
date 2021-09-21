@@ -28,6 +28,22 @@ exports.formatReviewData = (reviewData) => {
   return formattedReviewData;
 };
 
+exports.formatCommentData = (commentData, reviewRows) => {
+  const formattedCommentData = commentData.map((comment) => {
+    return [
+      comment.author, 
+      comment.review_id, 
+      comment.votes, 
+      comment.body
+    ];
+  });
+  return formattedCommentData;
+};
+
+/*
+ Below: start to code that pulls the primary key values from the referenced data - not needed currently as values available in db source data but may be needed if problems found later.
+*/
+
 // exports.createCategoryRef = (categoryRows) => {
 //     const categoryRef = {}
 //     categoryRows.forEach((category) => {
@@ -49,19 +65,6 @@ exports.formatReviewData = (reviewData) => {
 //   return formattedReviewData;
 // };
 
-exports.createReviewRef = (reviewRows) => {};
-
-exports.formatCommentData = (commentData, reviewRows) => {
-    const formattedCommentData = commentData.map((comment) => {
-            return [
-              comment.author,
-              comment.review_id,
-              comment.votes,
-              comment.body,
-            ];
-          });
-          return formattedCommentData;
-}
 
 // exports.formatReviewOwnerData = (reviewData, userRef) => {
 //     const formattedReviewOwnerData = reviewData.map((review) => {
@@ -71,3 +74,7 @@ exports.formatCommentData = (commentData, reviewRows) => {
 //       });
 //       return formattedReviewOwnerData;
 // };
+
+
+// exports.createReviewRef = (reviewRows) => {};
+// exports.formatCommentData = (commentData, reviewRows) => {}
