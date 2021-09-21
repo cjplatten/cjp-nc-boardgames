@@ -1,5 +1,9 @@
-const express = require('express');
-const apiRouter = require('./routes/api-router.js')
+const express = require("express");
+const { handleServerErrors } = require("./errors/errors.js");
+const apiRouter = require("./routes/api-router.js");
+
+const app = express();
+app.use(express.json());
 
 /*
 Essential endpoints
@@ -15,12 +19,8 @@ GET /api
 All of your endpoints should send the responses specified below in an object, with a key name of what it is that being sent.
 */
 
+app.use("/api", apiRouter);
 
-/*GET /api/categories
-Responds with:
+app.use(handleServerErrors);
 
-an array of category objects, each of which should have the following properties:
-slug
-description
-*/
-
+module.exports = app;
