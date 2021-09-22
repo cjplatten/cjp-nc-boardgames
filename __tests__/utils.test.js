@@ -105,22 +105,19 @@ describe("formatReviewData", () => {
         votes: 4,
         category: "strategy",
         owner: "ghost22",
+        created_at: new Date(1610964020514)
       },
     ];
     const actual = formatReviewData(reviewData);
-    const expected = [
-      [
-        "jenga",
-        "could be sturdier",
-        "a name",
-        "imagesite.co.uk/awesrdtfguhyji",
-        4,
-        "strategy",
-        "ghost22",
-      ],
-    ];
-
-    expect(actual).toEqual(expected);
+  
+    expect(actual[0][0]).toEqual("jenga");
+    expect(actual[0][1]).toEqual("could be sturdier");
+    expect(actual[0][2]).toEqual("a name");
+    expect(actual[0][3]).toEqual("imagesite.co.uk/awesrdtfguhyji");
+    expect(actual[0][4]).toEqual(4);
+    expect(actual[0][5]).toEqual("strategy");
+    expect(actual[0][6]).toEqual("ghost22");
+    expect(actual[0][7]).not.toBe(undefined);
   });
   test("does not mutate the original reviewData", () => {
     const reviewData = [
@@ -132,6 +129,7 @@ describe("formatReviewData", () => {
         votes: 4,
         category: "strategy",
         owner: "ghost22",
+        created_at: new Date(1511354613389)
       },
     ];
     const expected = [
@@ -143,6 +141,7 @@ describe("formatReviewData", () => {
         votes: 4,
         category: "strategy",
         owner: "ghost22",
+        created_at: new Date(1511354613389)
       },
     ];
 
@@ -166,12 +165,17 @@ describe("formatCommentData", () => {
         review_id: 35,
         votes: 3,
         body: "thx for the votes",
+        created_at: new Date(1511354613389)
       },
     ];
     const actual = formatCommentData(commentData);
-    const expected = [["ghost22", 35, 3, "thx for the votes"]];
 
-    expect(actual).toEqual(expected);
+
+    expect(actual[0][0]).toEqual("ghost22");
+    expect(actual[0][1]).toEqual(35);
+    expect(actual[0][2]).toEqual(3);
+    expect(actual[0][3]).toEqual("thx for the votes");
+    expect(actual[0][4]).not.toBe(undefined);
   });
   test("does not mutate the original commentData", () => {
     const commentData = [
@@ -180,6 +184,7 @@ describe("formatCommentData", () => {
         review_id: 35,
         votes: 3,
         body: "thx for the votes",
+        created_at: new Date(1511354613389)
       },
     ];
     const expected = [
@@ -188,6 +193,7 @@ describe("formatCommentData", () => {
         review_id: 35,
         votes: 3,
         body: "thx for the votes",
+        created_at: new Date(1511354613389)
       },
     ];
 

@@ -25,6 +25,7 @@ exports.formatReviewData = (reviewData) => {
       review.votes,
       review.category,
       review.owner,
+      review.created_at
     ];
   });
   return formattedReviewData;
@@ -32,7 +33,14 @@ exports.formatReviewData = (reviewData) => {
 
 exports.formatCommentData = (commentData, reviewRows) => {
   const formattedCommentData = commentData.map((comment) => {
-    return [comment.author, comment.review_id, comment.votes, comment.body];
+    console.log(comment)
+    return [
+      comment.author, 
+      comment.review_id, 
+      comment.votes, 
+      comment.body, 
+      comment.created_at
+    ];
   });
   return formattedCommentData;
 };

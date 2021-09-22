@@ -120,7 +120,7 @@ const seed = (data) => {
       const queryStr = format(
         `
         INSERT INTO reviews (
-          title, review_body, designer, review_img_url, votes, category, owner
+          title, review_body, designer, review_img_url, votes, category, owner, created_at
           )
           VALUES
           %L
@@ -137,7 +137,7 @@ const seed = (data) => {
       const queryStr = format(
         `
         INSERT INTO comments (
-          author, review_id, votes, body
+          author, review_id, votes, body, created_at
           )
           VALUES
           %L
