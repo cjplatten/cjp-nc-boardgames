@@ -56,5 +56,20 @@ describe("/api", () => {
         expect(res.body.msg).toBe('Not found')
       });
     });
+    describe.only('PATCH', () => {
+      test('200: responds with current votes if passed 0', async () => {
+        const res = await request(app).patch('/api/reviews/3').send({inc_votes: 0}).expect(200);
+        expect(res.body).toEqual({ updatedVotes: 5 });
+      });
+      test('200: increases votes when passed a positive integer', async () => {
+        const res = await request(app).patch('/api/reviews/3').send({inc_votes: 2}).expect(200);
+        expect(res.body).toEqual({ updatedVotes: 7 });
+      });
+      test('200: decreases votes when passed a negative integer', async () => {
+        const res = await request(app).patch('/api/reviews/3').send({inc_votes: -2}).expect(200);
+        expect(res.body).toEqual({ updatedVotes: 3 });
+      });
+     
+    });
   });
 });
