@@ -18,8 +18,9 @@ describe("/api", () => {
   });
   describe("/categories", () => {
     describe("GET", () => {
-      test("200: responds with an array of category objects with the properties slg", async () => {
+      test("200: responds with an array of category objects with the properties slug, description", async () => {
         const res = await request(app).get("/api/categories").expect(200);
+        expect(res.body.categories).toHaveLength(4);
         res.body.categories.forEach((category) => {
           expect(category).toMatchObject({
             slug: expect.any(String),
@@ -84,6 +85,28 @@ describe("/api", () => {
       test('400: responds with "Bad request" if passed inc_votes value that isn\'t a number', async () => {
         const res = await request(app).patch("/api/reviews/invalid").send({inc_votes: 'azesxdcfgvbh'}).expect(400);
         expect(res.body.msg).toBe('Bad request')
+      });
+    });
+  });
+  describe("/reviews", () => {
+    describe("GET", () => {
+      test("200: responds with an array of review objects with the properties owner, title, review_id, review_body, designer, review_img_url, category, created_at, votes, comment_count", async () => {
+        const res = await request(app).get("/api/categories").expect(200);
+        expect(res.body.reviews).toHaveLength(13);
+        res.body.reviews.forEach((review) => {
+          expect(review).toMatchObject({
+            owner: expect.any(String),
+            title: expect.any(String),
+            review_id: expect.any(Number),
+            review_body: expect.any(String),
+            designer: expect.any(String),
+            review_img_url: expect.any(String),
+            category: expect.any(String),
+            created_at: expect.any(String),
+            votes: expect.any(Number),
+            comment_count: expect.any(Number),
+          });
+        });
       });
     });
   });

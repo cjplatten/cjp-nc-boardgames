@@ -6,11 +6,10 @@ exports.fetchReviewByID = async (review_id) => {
     review_id,
   ]);
   const fetchedReview = results.rows[0];
-  if (fetchedReview !== undefined) {
-    fetchedReview.comment_count = await countCommentsByReview(review_id);
-  } else {
+  if (fetchedReview === undefined) {
     return Promise.reject({ status: 404, msg: "Not found" });
   }
+  fetchedReview.comment_count = await countCommentsByReview(review_id);
   return fetchedReview;
 };
 
