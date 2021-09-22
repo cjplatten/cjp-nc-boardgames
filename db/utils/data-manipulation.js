@@ -1,3 +1,5 @@
+const db = require("../connection.js");
+
 // extract any functions you are using to manipulate your data, into this file
 exports.formatCategoryData = (categoryData) => {
   const formattedCategoryData = categoryData.map((category) => {
@@ -30,14 +32,17 @@ exports.formatReviewData = (reviewData) => {
 
 exports.formatCommentData = (commentData, reviewRows) => {
   const formattedCommentData = commentData.map((comment) => {
-    return [
-      comment.author, 
-      comment.review_id, 
-      comment.votes, 
-      comment.body
-    ];
+    return [comment.author, comment.review_id, comment.votes, comment.body];
   });
   return formattedCommentData;
+};
+
+exports.countCommentsByReview = async (review_id) => {
+  const reviewComments = await db.query(
+    `SELECT * FROM comments WHERE review_id = $1`,
+    [review_id]
+  );
+  return reviewComments.rows.length;
 };
 
 /*
@@ -65,7 +70,6 @@ exports.formatCommentData = (commentData, reviewRows) => {
 //   return formattedReviewData;
 // };
 
-
 // exports.formatReviewOwnerData = (reviewData, userRef) => {
 //     const formattedReviewOwnerData = reviewData.map((review) => {
 //         return [
@@ -74,7 +78,6 @@ exports.formatCommentData = (commentData, reviewRows) => {
 //       });
 //       return formattedReviewOwnerData;
 // };
-
 
 // exports.createReviewRef = (reviewRows) => {};
 // exports.formatCommentData = (commentData, reviewRows) => {}
