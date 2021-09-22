@@ -56,7 +56,7 @@ describe("/api", () => {
         expect(res.body.msg).toBe('Not found')
       });
     });
-    describe.only('PATCH', () => {
+    describe('PATCH', () => {
       test('200: responds with current votes if passed 0', async () => {
         const res = await request(app).patch('/api/reviews/3').send({inc_votes: 0}).expect(200);
         expect(res.body).toEqual({ updatedVotes: 5 });
@@ -69,7 +69,22 @@ describe("/api", () => {
         const res = await request(app).patch('/api/reviews/3').send({inc_votes: -2}).expect(200);
         expect(res.body).toEqual({ updatedVotes: 3 });
       });
-     
+      test('400: responds with "Bad request" if passed a review id ithat isn\'t a number', async () => {
+        const res = await request(app).patch("/api/reviews/invalid").send({inc_votes: 2}).expect(400);
+        expect(res.body.msg).toBe('Bad request')
+      });
+      test('404: responds with "Not found" if passed a review id that is a number but doesn\'t exist', async () => {
+        const res = await request(app).patch("/api/reviews/456789").send({inc_votes: 2}).expect(404);
+        expect(res.body.msg).toBe('Not found')
+      });
+      test('400: responds with "Bad request" if not passed inc_votes object', async () => {
+        const res = await request(app).patch("/api/reviews/invalid").send({}).expect(400);
+        expect(res.body.msg).toBe('Bad request')
+      });
+      test('400: responds with "Bad request" if passed inc_votes value that isn\'t a number', async () => {
+        const res = await request(app).patch("/api/reviews/invalid").send({inc_votes: 'azesxdcfgvbh'}).expect(400);
+        expect(res.body.msg).toBe('Bad request')
+      });
     });
   });
 });
