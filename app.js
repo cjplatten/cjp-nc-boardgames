@@ -21,6 +21,10 @@ All of your endpoints should send the responses specified below in an object, wi
 
 app.use("/api", apiRouter);
 
+app.all('*', (req,res) => {
+    res.status(404).send({ msg: 'Invalid URL' });
+})
+
 app.use(handleServerErrors);
 
 module.exports = app;
