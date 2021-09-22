@@ -47,8 +47,14 @@ describe("/api", () => {
           comment_count: 3,
         });
       });
-      
+      test('400: responds with "Bad request" if passed a review id ithat isn\'t a number', async () => {
+        const res = await request(app).get("/api/reviews/invalid").expect(400);
+        expect(res.body.msg).toBe('Bad request')
+      });
+      test('404: responds with "Not found" if passed a review id that is a number but doesn\'t exist', async () => {
+        const res = await request(app).get("/api/reviews/456789").expect(404);
+        expect(res.body.msg).toBe('Not found')
+      });
     });
   });
 });
-// });

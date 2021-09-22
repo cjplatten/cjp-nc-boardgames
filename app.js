@@ -1,6 +1,10 @@
 const express = require("express");
 const apiRouter = require("./routes/api-router.js");
-const { handleServerErrors } = require("./errors/errors.js");
+const {
+  handleServerErrors,
+  handlePQSL400Errors,
+  handleCustomErrors,
+} = require("./errors/errors.js");
 
 const app = express();
 app.use(express.json());
@@ -21,10 +25,12 @@ All of your endpoints should send the responses specified below in an object, wi
 
 app.use("/api", apiRouter);
 
-app.all('*', (req,res) => {
-    res.status(404).send({ msg: 'Invalid URL' });
-})
+app.all("*", (req, res) => {
+  res.status(404).send({ msg: "Invalid URL" });
+});
 
+app.use(handlePQSL400Errors);
+app.use(handleCustomErrors);
 app.use(handleServerErrors);
 
 module.exports = app;

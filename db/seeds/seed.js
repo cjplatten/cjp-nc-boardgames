@@ -150,9 +150,9 @@ const seed = (data) => {
     // .then((commentInsertResults) => {
     //   console.log(commentInsertResults.rows);
     // });
-    .then(() => {
-      console.log('Seed complete')
-    })
+    // .then(() => {
+    //   console.log('Seed complete')
+    // })
 };
 
 module.exports = seed;
