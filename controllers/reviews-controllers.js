@@ -1,16 +1,17 @@
-const reviews = require("../db/data/test-data/reviews");
-const { fetchReviewByID, editReview } = require("../models/reviews-models");
+const { fetchReviewByID, editReview, fetchAllReviews } = require("../models/reviews-models");
+
+exports.getAllReviews = async (req, res, next) => {
+  const reviews = await fetchAllReviews();
+  
+  return res.status(200).send({reviews});
+}
 
 exports.getReviewByID = async (req, res, next) => {
   try {
     const { review_id } = req.params;
     const review = await fetchReviewByID(review_id);
-    console.log(review, "getReviewByID controller");
-    // if (review)
+    // console.log(review, "getReviewByID controller");
     return res.status(200).send({ review });
-    // else {
-    //   return Promise.reject({status: 404, msg: 'Not Found'})
-    // }
   } catch (err) {
     // console.log(err, "getReviewByID err");
     next(err);

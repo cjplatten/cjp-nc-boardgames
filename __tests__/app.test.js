@@ -88,10 +88,10 @@ describe("/api", () => {
       });
     });
   });
-  describe("/reviews", () => {
+  describe.only("/reviews", () => {
     describe("GET", () => {
       test("200: responds with an array of review objects with the properties owner, title, review_id, review_body, designer, review_img_url, category, created_at, votes, comment_count", async () => {
-        const res = await request(app).get("/api/categories").expect(200);
+        const res = await request(app).get("/api/reviews").expect(200);
         expect(res.body.reviews).toHaveLength(13);
         res.body.reviews.forEach((review) => {
           expect(review).toMatchObject({
