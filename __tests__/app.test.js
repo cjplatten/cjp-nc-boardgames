@@ -62,11 +62,11 @@ describe("/api", () => {
           .expect(200);
         expect(res.body.reviews).toBeSortedBy("votes");
       });
-      test('404: returns "column does not exist" if queries with a column that does not exist', async () => {
+      test('404: returns "Not found" if queries with a column that does not exist', async () => {
         const res = await request(app)
           .get("/api/reviews?sort_by=not_a_column")
           .expect(404);
-        expect(res.body.msg).toBe("Column does not exist");
+        expect(res.body.msg).toBe("Not found");
       });
     });
     describe("accepts order queries", () => {
@@ -224,7 +224,7 @@ describe("/api", () => {
           expect(res.body.msg).toBe("Not found");
         });
       });
-      describe.only('POST', () => {
+      describe('POST', () => {
         test('200: accepts an object with the properties username and body, adds this to comments table and returns a comment object with the properties comment_id, votes, created_at, author, body', async () => {
           const res = await request(app)
           .post('/api/reviews/3/comments')
