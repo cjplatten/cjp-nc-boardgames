@@ -22,7 +22,6 @@ exports.fetchAllReviews = async (
     ? await db.query(queryStr, [category])
     : await db.query(queryStr);
 
-  // console.log(fetchedReviews.rows);
   if (fetchedReviews.rows.length === 0) {
     return Promise.reject({ status: 404, msg: "Not found" });
   }
@@ -33,7 +32,6 @@ exports.fetchAllReviews = async (
 
   await Promise.all(fetchReviewsPromises);
 
-  // console.log(fetchedReviews.rows)
   return fetchedReviews.rows;
 };
 
@@ -50,12 +48,11 @@ exports.fetchReviewByID = async (review_id) => {
 };
 
 exports.editReview = async (inc_votes, review_id) => {
-  // console.log('votes', votes)
   const alteredVotes = await db.query(
     `UPDATE reviews SET votes = votes + $1 WHERE review_id = $2 RETURNING votes;`,
     [inc_votes, review_id]
   );
-  // console.log(alteredVotes.rows)
+
   if (alteredVotes.rows.length === 0) {
     return Promise.reject({ status: 404, msg: "Not found" });
   }
