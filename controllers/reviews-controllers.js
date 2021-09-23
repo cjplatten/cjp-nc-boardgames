@@ -1,12 +1,11 @@
 const { fetchReviewByID, editReview, fetchAllReviews } = require("../models/reviews-models");
 
 exports.getAllReviews = async (req, res, next) => {
-  try {const { sort_by, order } = req.query
+  try {const { sort_by, order, category } = req.query
 
-  const reviews = await fetchAllReviews(sort_by, order);
+  const reviews = await fetchAllReviews(sort_by, order, category);
   
   return res.status(200).send({reviews});} catch (err) {
-    console.log(err);
     next(err)
   }
 }

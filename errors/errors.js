@@ -10,7 +10,7 @@ exports.handlePQSLErrors = (err, req, res, next) => {
 
 exports.handleCustomErrors = (err, req, res, next) => {
     if (err.status) {
-        console.log(err, 'in handleCustomErrors')
+        // console.log(err, 'in handleCustomErrors')
 
         res.status(err.status).send({msg: err.msg});
     } else {
@@ -19,5 +19,6 @@ exports.handleCustomErrors = (err, req, res, next) => {
 };
 
 exports.handleServerErrors = (err, req, res, next) => {
+    console.log(err);
     res.status(500).send({msp: 'Internal Server Error'});
 }
