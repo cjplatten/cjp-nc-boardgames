@@ -200,7 +200,7 @@ describe("/api", () => {
         expect(res.body.msg).toBe("Bad request");
       });
     });
-    describe.only("/comments", () => {
+    describe("/comments", () => {
       describe("GET", () => {
         test("200: responds with array of comment objects for the given review id with the properties comment_id, votes, created_at, author, body", async () => {
           const res = await request(app).get("/api/reviews/3/comments").expect(200);
@@ -221,6 +221,45 @@ describe("/api", () => {
         });
         test('404: responds with "Not found" if passed a review id that is a number but doesn\'t exist', async () => {
           const res = await request(app).get("/api/reviews/456789/comments").expect(404);
+          expect(res.body.msg).toBe("Not found");
+        });
+      });
+      describe.only('POST', () => {
+        test('200: accepts an object with the properties username and body, adds this to comments table and returns a comment object with the properties comment_id, votes, created_at, author, body', async () => {
+          const res = await request(app)
+          .post('/api/reviews/3/comments')
+          .send({ username: 'philippaclaire9' , body: 'wow what a great opinion'})
+          .expect(200)
+
+          expect(res.body.comment).toMatchObject({
+            comment_id: 7,
+            votes: 0,
+            created_at: expect.any(String),
+            author: 'philippaclaire9',
+            body: 'wow what a great opinion',
+          });
+
+          const commentCountCheck = await request(app)
+          .get("/api/reviews/3")
+          .expect(200);
+          expect(commentCountCheck.body.review.comment_count).toBe(4)
+        });
+        test('400: responds with "Bad request" if passed a review id ithat isn\'t a number', async () => {
+          const res = await request(app).post("/api/reviews/invalid/comments")
+          .send({ username: 'philippaclaire9' , body: 'wow what a great opinion'})
+          .expect(400);
+          expect(res.body.msg).toBe("Bad request");
+        });
+        test('404: responds with "Not found" if passed a review id that is a number but doesn\'t exist', async () => {
+          const res = await request(app).post("/api/reviews/456789/comments")
+          .send({ username: 'philippaclaire9' , body: 'wow what a great opinion'})
+          .expect(404);
+          expect(res.body.msg).toBe("Not found");
+        });
+        test('404: responds with "Not found" if passed a username that doesn\'t exist', async () => {
+          const res = await request(app).post("/api/reviews/456789/comments")
+          .send({ username: 'notreal' , body: 'wow what a great opinion'})
+          .expect(404);
           expect(res.body.msg).toBe("Not found");
         });
       });
