@@ -33,7 +33,6 @@ exports.formatReviewData = (reviewData) => {
 
 exports.formatCommentData = (commentData, reviewRows) => {
   const formattedCommentData = commentData.map((comment) => {
-    console.log(comment)
     return [
       comment.author, 
       comment.review_id, 

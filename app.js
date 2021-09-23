@@ -2,7 +2,7 @@ const express = require("express");
 const apiRouter = require("./routes/api-router.js");
 const {
   handleServerErrors,
-  handlePQSL400Errors,
+  handlePQSLErrors,
   handleCustomErrors,
 } = require("./errors/errors.js");
 
@@ -29,7 +29,7 @@ app.all("*", (req, res) => {
   res.status(404).send({ msg: "Invalid URL" });
 });
 
-app.use(handlePQSL400Errors);
+app.use(handlePQSLErrors);
 app.use(handleCustomErrors);
 app.use(handleServerErrors);
 

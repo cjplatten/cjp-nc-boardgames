@@ -1,11 +1,11 @@
 const db = require("../db/connection.js");
 const { countCommentsByReview } = require("../db/utils/data-manipulation.js");
 
-exports.fetchAllReviews = async () => {
-  const fetchedReviews = await db.query(`SELECT * FROM reviews`);
-  // fetchedReviews.rows.forEach((review) => {
-  //   review.comment_count = await countCommentsByReview(review_id);
-  // });
+exports.fetchAllReviews = async (sort_by = 'created_at',) => {
+  // if 
+  const fetchedReviews = await db.query(`SELECT * FROM reviews ORDER BY ${sort_by}`);
+
+  // console.log(fetchedReviews.rows)
 
   const fetchReviewsPromises = fetchedReviews.rows.map( async(review) => {
     review.comment_count = await countCommentsByReview(review.review_id);
@@ -13,7 +13,7 @@ exports.fetchAllReviews = async () => {
 
   await Promise.all(fetchReviewsPromises);
 
-  console.log(fetchedReviews.rows)
+  // console.log(fetchedReviews.rows)
   return fetchedReviews.rows;
 };
 

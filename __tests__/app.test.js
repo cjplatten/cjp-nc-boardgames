@@ -108,6 +108,26 @@ describe("/api", () => {
           });
         });
       });
+      describe('accepts sort_by queries', () => {
+          test('200: sorts by date by default', async () => {
+            const res = await request(app)
+            .get('/api/reviews')
+            .expect(200)
+            expect(res.body.reviews).toBeSortedBy('created_at')
+          });
+          test('200: sorts by other columns if passed a query', async () => {
+            const res = await request(app)
+            .get('/api/reviews?sort_by=votes')
+            .expect(200)
+            expect(res.body.reviews).toBeSortedBy('votes')
+          });
+          test('404: returns "column does not exist" if queries with a column that does not exist', async () => {
+            const res = await request(app)
+            .get('/api/reviews?sort_by=not_a_column')
+            .expect(404)
+            expect(res.body.msg).toBe('Column does not exist')
+          });
+        });
     });
   });
 });
