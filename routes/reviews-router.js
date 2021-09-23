@@ -9,6 +9,6 @@ reviewsRouter.route('/').get(getAllReviews)
 
 reviewsRouter.route('/:review_id').get(getReviewByID).patch(patchReview)
 
-reviewsRouter.use('/:review_id/comments', getCommentsbyReviewID)
+reviewsRouter.route('/:review_id/comments').get(getCommentsbyReviewID)
 
 module.exports = reviewsRouter
