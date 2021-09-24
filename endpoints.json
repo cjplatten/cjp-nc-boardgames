@@ -98,5 +98,9 @@
         "body": "this is an example comment"
       }
     }
+  },
+  "DELETE /api/comments/:comment_id": {
+    "description": "deletes the comment with the specified comment id, returns an empty body",
+    "exampleResponse": {}
   }
 }

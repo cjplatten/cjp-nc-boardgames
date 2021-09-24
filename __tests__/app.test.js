@@ -18,6 +18,7 @@ describe("/api", () => {
       "PATCH /api/reviews/:review_id": expect.any(Object),
       "GET /api/reviews/:review_id/comments": expect.any(Object),
       "POST /api/reviews/:review_id/comments": expect.any(Object),
+      "DELETE /api/comments/:comment_id": expect.any(Object),
     });
   });
   describe("/notARoute", () => {
@@ -331,7 +332,7 @@ describe("/api", () => {
       });
     });
   });
-  describe.only('/comments/:comment_id', () => {
+  describe('/comments/:comment_id', () => {
     describe('DELETE', () => {
       test('204: removes comment with comment_id and returns nothing', async () => {
         const res = await request(app)
@@ -356,6 +357,5 @@ describe("/api", () => {
         expect(res.body.msg).toBe("Not found");
       });
     });
-    
   });
 });

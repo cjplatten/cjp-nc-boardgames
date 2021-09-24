@@ -27,7 +27,6 @@ exports.postCommentToReview = async (req, res, next) => {
 
 exports.deleteCommentByID = async (req, res, next) => {
   try {
-    console.log(req.params)
     const { comment_id } = req.params;
     const comment = await removeCommentByID(comment_id);
     return res.status(204).send({ comment });
