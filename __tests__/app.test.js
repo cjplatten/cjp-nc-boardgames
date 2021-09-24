@@ -332,29 +332,40 @@ describe("/api", () => {
       });
     });
   });
-  describe('/comments/:comment_id', () => {
-    describe('DELETE', () => {
-      test('204: removes comment with comment_id and returns nothing', async () => {
-        const res = await request(app)
-        .delete('/api/comments/1')
-        .expect(204)
-        expect(res.body.comment).toBe(undefined)
-        
-        const commentsLeft = await db.query(`SELECT * FROM comments`)
-        console.log(commentsLeft.rows.length)
-        expect(commentsLeft.rows).toHaveLength(5)
+  describe("/comments/:comment_id", () => {
+    describe("DELETE", () => {
+      test("204: removes comment with comment_id and returns nothing", async () => {
+        const res = await request(app).delete("/api/comments/1").expect(204);
+        expect(res.body.comment).toBe(undefined);
+
+        const commentsLeft = await db.query(`SELECT * FROM comments`);
+        console.log(commentsLeft.rows.length);
+        expect(commentsLeft.rows).toHaveLength(5);
       });
       test('400: responds with "Bad request" if passed a review id that isn\'t a number', async () => {
         const res = await request(app)
-        .delete('/api/comments/aesrdctfgvyhjk')
+          .delete("/api/comments/aesrdctfgvyhjk")
           .expect(400);
         expect(res.body.msg).toBe("Bad request");
       });
       test('404: responds with "Not found" if passed a review id that is a number but doesn\'t exist', async () => {
         const res = await request(app)
-          .delete('/api/comments/234567890')
+          .delete("/api/comments/234567890")
           .expect(404);
         expect(res.body.msg).toBe("Not found");
+      });
+    });
+  });
+  describe.only("/users", () => {
+    describe("GET", () => {
+      test("200: responds with an array of user objects with the property username", async () => {
+        const res = await request(app).get("/api/users").expect(200);
+        expect(res.body.users).toHaveLength(4);
+        res.body.users.forEach((user) => {
+          expect(user).toMatchObject({
+            username: expect.any(String),
+          });
+        });
       });
     });
   });
