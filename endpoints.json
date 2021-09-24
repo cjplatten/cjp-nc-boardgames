@@ -20,15 +20,83 @@
     "exampleResponse": {
       "reviews": [
         {
-          "title": "One Night Ultimate Werewolf",
-          "designer": "Akihisa Okui",
-          "owner": "happyamy2016",
-          "review_img_url": "https://images.pexels.com/photos/5350049/pexels-photo-5350049.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260",
-          "category": "hidden-roles",
-          "created_at": 1610964101251,
-          "votes": 5
+          "review_id": 18,
+          "title": "Reef",
+          "review_body": "This game reminds me of the stress-free environment described in a song sung by a crab in the famous film about a mermaid. Plenty of coral collecting, and reef building to keep you entertained ",
+          "designer": "Emerson Matsuuchi",
+          "review_img_url": "https://images.pexels.com/photos/163064/play-stone-network-networked-interactive-163064.jpeg",
+          "votes": 6,
+          "category": "strategy",
+          "owner": "tickle122",
+          "created_at": "1970-01-10T02:56:38.400Z",
+          "comment_count": 4
         }
       ]
+    }
+  },
+  "GET /api/reviews/:review_id": {
+    "description": "serves a review object with the specified review id",
+    "exampleResponse": {
+      "review": {
+        "review_id": 4,
+        "title": "One Night Ultimate Werewolf",
+        "review_body": "We couldn't find the werewolf!",
+        "designer": "Akihisa Okui",
+        "review_img_url": "https://images.pexels.com/photos/5350049/pexels-photo-5350049.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260",
+        "votes": 5,
+        "category": "hidden-roles",
+        "owner": "happyamy2016",
+        "created_at": "2021-01-18T10:01:41.251Z",
+        "comment_count": 4
+      }
+    }
+  },
+  "PATCH /api/reviews/:review_id": {
+    "description": "increases the number of votes of the review object with the specified review id by the number on the inc_votes property on the object sent (decreases the number of votes if sent a negative number)",
+    "exampleBody": { "inc_votes": 2 },
+    "exampleResponse": {
+      "review": {
+        "review_id": 4,
+        "title": "One Night Ultimate Werewolf",
+        "review_body": "We couldn't find the werewolf!",
+        "designer": "Akihisa Okui",
+        "review_img_url": "https://images.pexels.com/photos/5350049/pexels-photo-5350049.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260",
+        "votes": 7,
+        "category": "hidden-roles",
+        "owner": "happyamy2016",
+        "created_at": "2021-01-18T10:01:41.251Z",
+        "comment_count": 4
+      }
+    }
+  },
+  "GET /api/reviews/:review_id/comments": {
+    "description": "serves an array of all comments for the specifed review id",
+    "queries": [],
+    "exampleResponse": {
+      "comments": [
+        {
+          "comment_id": 19,
+          "author": "jessjelly",
+          "review_id": 3,
+          "votes": 3,
+          "created_at": "2021-03-27T19:48:58.110Z",
+          "body": "Quis duis mollit ad enim deserunt."
+        }
+      ]
+    }
+  },
+  "POST /api/reviews/:review_id/comments": {
+    "description": "inserts a new comment into the comment table with the specified review id",
+    "exampleBody": { "username": "jessjelly", "body": "this is an example comment" },
+    "exampleResponse": {
+      "comment": {
+        "comment_id": 62,
+        "author": "jessjelly",
+        "review_id": 3,
+        "votes": 0,
+        "created_at": "2021-09-24T10:29:08.002Z",
+        "body": "this is an example comment"
+      }
     }
   }
 }
