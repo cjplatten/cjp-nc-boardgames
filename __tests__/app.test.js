@@ -14,6 +14,10 @@ describe("/api", () => {
       "GET /api": expect.any(Object),
       "GET /api/categories": expect.any(Object),
       "GET /api/reviews": expect.any(Object),
+      "GET /api/reviews/:review_id": expect.any(Object),
+      "PATCH /api/reviews/:review_id": expect.any(Object),
+      "GET /api/reviews/:review_id/comments": expect.any(Object),
+      "POST /api/reviews/:review_id/comments": expect.any(Object),
     });
   });
   describe("/notARoute", () => {
@@ -157,27 +161,63 @@ describe("/api", () => {
         expect(res.body.msg).toBe("Not found");
       });
     });
-    describe("PATCH", () => {
+    describe.only("PATCH", () => {
       test("200: responds with current votes if passed 0", async () => {
         const res = await request(app)
           .patch("/api/reviews/3")
           .send({ inc_votes: 0 })
           .expect(200);
-        expect(res.body).toEqual({ updatedVotes: 5 });
+        expect(res.body.review).toMatchObject({
+          owner: "bainesface",
+          title: "Ultimate Werewolf",
+          review_id: 3,
+          review_body: "We couldn't find the werewolf!",
+          designer: "Akihisa Okui",
+          review_img_url:
+            "https://www.golenbock.com/wp-content/uploads/2015/01/placeholder-user.png",
+          category: "social deduction",
+          created_at: expect.any(String),
+          votes: 5,
+          comment_count: 3,
+        });
       });
       test("200: increases votes when passed a positive integer", async () => {
         const res = await request(app)
           .patch("/api/reviews/3")
           .send({ inc_votes: 2 })
           .expect(200);
-        expect(res.body).toEqual({ updatedVotes: 7 });
+        expect(res.body.review).toMatchObject({
+          owner: "bainesface",
+          title: "Ultimate Werewolf",
+          review_id: 3,
+          review_body: "We couldn't find the werewolf!",
+          designer: "Akihisa Okui",
+          review_img_url:
+            "https://www.golenbock.com/wp-content/uploads/2015/01/placeholder-user.png",
+          category: "social deduction",
+          created_at: expect.any(String),
+          votes: 7,
+          comment_count: 3,
+        });
       });
       test("200: decreases votes when passed a negative integer", async () => {
         const res = await request(app)
           .patch("/api/reviews/3")
           .send({ inc_votes: -2 })
           .expect(200);
-        expect(res.body).toEqual({ updatedVotes: 3 });
+        expect(res.body.review).toMatchObject({
+          owner: "bainesface",
+          title: "Ultimate Werewolf",
+          review_id: 3,
+          review_body: "We couldn't find the werewolf!",
+          designer: "Akihisa Okui",
+          review_img_url:
+            "https://www.golenbock.com/wp-content/uploads/2015/01/placeholder-user.png",
+          category: "social deduction",
+          created_at: expect.any(String),
+          votes: 3,
+          comment_count: 3,
+        });
       });
       test('400: responds with "Bad request" if passed a review id ithat isn\'t a number', async () => {
         const res = await request(app)

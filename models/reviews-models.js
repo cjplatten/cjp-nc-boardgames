@@ -49,12 +49,15 @@ exports.fetchReviewByID = async (review_id) => {
 
 exports.editReview = async (inc_votes, review_id) => {
   const alteredVotes = await db.query(
-    `UPDATE reviews SET votes = votes + $1 WHERE review_id = $2 RETURNING votes;`,
+    `UPDATE reviews SET votes = votes + $1 WHERE review_id = $2 RETURNING *;`,
     [inc_votes, review_id]
   );
 
   if (alteredVotes.rows.length === 0) {
     return Promise.reject({ status: 404, msg: "Not found" });
   }
+
+  alteredVotes.rows[0].comment_count = await countCommentsByReview(review_id);
+
   return alteredVotes.rows[0];
 };

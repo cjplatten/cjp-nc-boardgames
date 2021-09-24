@@ -26,10 +26,10 @@ exports.patchReview = async (req, res, next) => {
     const { review_id } = req.params;
     const { inc_votes } = req.body;
     
-    const editedReview = await editReview(inc_votes, review_id);
-    
-    const updatedVotes = editedReview.votes;
-    return res.status(200).send({ updatedVotes });
+    const review = await editReview(inc_votes, review_id);
+    console.log(review)
+    // const updatedVotes = editedReview.votes;
+    return res.status(200).send({ review });
   } catch (err) {
     next(err);
   }
