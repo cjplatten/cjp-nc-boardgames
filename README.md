@@ -1,11 +1,13 @@
 # Board Games API
 
-Find the hosted version here:
-https://nc-boardgames-cjp.herokuapp.com/api
-
 ## Summary
 
 This is an SQL database API which stores reviews of board games linked to categories and allows users to post comments related to specified reviews and vote on reviews.
+<br></br>
+Find the hosted version here:
+https://nc-boardgames-cjp.herokuapp.com/api
+
+---
 
 ## Instructions
 
@@ -110,6 +112,7 @@ PGDATABASE=nc_games
 There are two different methods of testing the functionality of this API, in a test enviroment using Jest and in the development environment using nodemon to listen to incoming server requests.
 
 The NODE_ENV will need changing depending on the type of testing which is acheived using the scripts below as set in package.json. This process is outlined below.
+
 ```JSON
 "scripts": {
 //[...]
@@ -117,25 +120,29 @@ The NODE_ENV will need changing depending on the type of testing which is acheiv
 "dev": "nodemon listen.js",
 //[...]
 }
-```  
+```
 
 #### **Test ENV - Jest**
 
 1. Run the following command in the terminal:
+
 ```bash
 npm test
 ```
+
 2. This will run the tests found in the `__tests__` folder of the repo and will indicate the pass/fail of test in the terminal.  
-<br>
+   <br>
 
 #### **Development ENV - nodemon**
 
 Development testing requires the use of an API client such as insomnia to test POST and PATCH endpoints but a browser client can also be used to test GET endpoints.
 
 1. Run the following command in the terminal:
+
 ```bash
 npm run dev
 ```
+
 2. The app will then begin listening the localhost port 9090 by default
 3. Test the endpoints detailed in https://nc-boardgames-cjp.herokuapp.com/api (or `endpoints.json`) as required
 4. Once testing is completed press `ctrl + c` in the terminal to close the port and stop the app listening.
