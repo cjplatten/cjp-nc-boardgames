@@ -18,3 +18,14 @@ exports.addCommentToReview = async (review_id, username, body) => {
     //   }
     return addedComment.rows[0]
 }
+
+exports.removeCommentByID = async (comment_id) => {
+  const checkIDExists = await db.query(`SELECT * FROM comments WHERE comment_id = $1`, [comment_id])
+
+  if (checkIDExists.rows.length === 0) {
+    return Promise.reject({ status: 404, msg: "Not found" });
+  }
+
+  const deletedComment = await db.query(`DELETE FROM comments WHERE comment_id = $1 RETURNING *`, [comment_id])
+  return deletedComment.rows;
+}

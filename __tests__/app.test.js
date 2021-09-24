@@ -152,7 +152,7 @@ describe("/api", () => {
           comment_count: 3,
         });
       });
-      test('400: responds with "Bad request" if passed a review id ithat isn\'t a number', async () => {
+      test('400: responds with "Bad request" if passed a review id that isn\'t a number', async () => {
         const res = await request(app).get("/api/reviews/invalid").expect(400);
         expect(res.body.msg).toBe("Bad request");
       });
@@ -161,7 +161,7 @@ describe("/api", () => {
         expect(res.body.msg).toBe("Not found");
       });
     });
-    describe.only("PATCH", () => {
+    describe("PATCH", () => {
       test("200: responds with current votes if passed 0", async () => {
         const res = await request(app)
           .patch("/api/reviews/3")
@@ -219,7 +219,7 @@ describe("/api", () => {
           comment_count: 3,
         });
       });
-      test('400: responds with "Bad request" if passed a review id ithat isn\'t a number', async () => {
+      test('400: responds with "Bad request" if passed a review id that isn\'t a number', async () => {
         const res = await request(app)
           .patch("/api/reviews/invalid")
           .send({ inc_votes: 2 })
@@ -265,7 +265,7 @@ describe("/api", () => {
             });
           });
         });
-        test('400: responds with "Bad request" if passed a review id ithat isn\'t a number', async () => {
+        test('400: responds with "Bad request" if passed a review id that isn\'t a number', async () => {
           const res = await request(app)
             .get("/api/reviews/invalid/comments")
             .expect(400);
@@ -301,7 +301,7 @@ describe("/api", () => {
             .expect(200);
           expect(commentCountCheck.body.review.comment_count).toBe(4);
         });
-        test('400: responds with "Bad request" if passed a review id ithat isn\'t a number', async () => {
+        test('400: responds with "Bad request" if passed a review id that isn\'t a number', async () => {
           const res = await request(app)
             .post("/api/reviews/invalid/comments")
             .send({
@@ -330,5 +330,32 @@ describe("/api", () => {
         });
       });
     });
+  });
+  describe.only('/comments/:comment_id', () => {
+    describe('DELETE', () => {
+      test('204: removes comment with comment_id and returns nothing', async () => {
+        const res = await request(app)
+        .delete('/api/comments/1')
+        .expect(204)
+        expect(res.body.comment).toBe(undefined)
+        
+        const commentsLeft = await db.query(`SELECT * FROM comments`)
+        console.log(commentsLeft.rows.length)
+        expect(commentsLeft.rows).toHaveLength(5)
+      });
+      test('400: responds with "Bad request" if passed a review id that isn\'t a number', async () => {
+        const res = await request(app)
+        .delete('/api/comments/aesrdctfgvyhjk')
+          .expect(400);
+        expect(res.body.msg).toBe("Bad request");
+      });
+      test('404: responds with "Not found" if passed a review id that is a number but doesn\'t exist', async () => {
+        const res = await request(app)
+          .delete('/api/comments/234567890')
+          .expect(404);
+        expect(res.body.msg).toBe("Not found");
+      });
+    });
+    
   });
 });

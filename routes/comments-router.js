@@ -1,8 +1,8 @@
 const express = require('express');
-const { getCommentsbyReviewID } = require('../controllers/comments-controllers');
+const { getCommentsbyReviewID, deleteCommentByID } = require('../controllers/comments-controllers');
 
 const commentsRouter = express.Router()
 
-commentsRouter.route('/')
+commentsRouter.route('/:comment_id').delete(deleteCommentByID)
 
 module.exports = commentsRouter;
