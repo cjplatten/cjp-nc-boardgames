@@ -19,6 +19,7 @@ describe("/api", () => {
       "GET /api/reviews/:review_id/comments": expect.any(Object),
       "POST /api/reviews/:review_id/comments": expect.any(Object),
       "DELETE /api/comments/:comment_id": expect.any(Object),
+      "GET /api/users": expect.any(Object),
     });
   });
   describe("/notARoute", () => {
@@ -356,7 +357,7 @@ describe("/api", () => {
       });
     });
   });
-  describe.only("/users", () => {
+  describe("/users", () => {
     describe("GET", () => {
       test("200: responds with an array of user objects with the property username", async () => {
         const res = await request(app).get("/api/users").expect(200);

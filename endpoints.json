@@ -102,5 +102,19 @@
   "DELETE /api/comments/:comment_id": {
     "description": "deletes the comment with the specified comment id, returns an empty body",
     "exampleResponse": {}
+  },
+  "GET /api/users": {
+    "description": "serves an array of all users usernames",
+    "queries": [],
+    "exampleResponse": {
+      "users": [
+        {
+          "username": "tickle122"
+        },
+        {
+          "username": "grumpy19"
+        }
+      ]
+    }
   }
 }
