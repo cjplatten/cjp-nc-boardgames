@@ -340,7 +340,6 @@ describe("/api", () => {
         expect(res.body.comment).toBe(undefined);
 
         const commentsLeft = await db.query(`SELECT * FROM comments`);
-        console.log(commentsLeft.rows.length);
         expect(commentsLeft.rows).toHaveLength(5);
       });
       test('400: responds with "Bad request" if passed a review id that isn\'t a number', async () => {
