@@ -44,7 +44,7 @@ describe("/api", () => {
       });
     });
   });
-  describe("/reviews", () => {
+  describe.only("/reviews", () => {
     describe("GET", () => {
       test("200: responds with an array of review objects with the properties owner, title, review_id, review_body, designer, review_img_url, category, created_at, votes, comment_count", async () => {
         const res = await request(app).get("/api/reviews").expect(200);
@@ -64,75 +64,79 @@ describe("/api", () => {
           });
         });
       });
-    });
-    describe("accepts sort_by queries", () => {
-      test("200: sorts by date by default", async () => {
-        const res = await request(app).get("/api/reviews").expect(200);
-        expect(res.body.reviews).toBeSortedBy("created_at");
-      });
-      test("200: sorts by other columns if passed a query", async () => {
-        const res = await request(app)
-          .get("/api/reviews?sort_by=votes")
-          .expect(200);
-        expect(res.body.reviews).toBeSortedBy("votes");
-      });
-      test('404: returns "Not found" if queries with a column that does not exist', async () => {
-        const res = await request(app)
-          .get("/api/reviews?sort_by=not_a_column")
-          .expect(404);
-        expect(res.body.msg).toBe("Not found");
-      });
-    });
-    describe("accepts order queries", () => {
-      test("200: sorts by ascending by default or when passed ASC", async () => {
-        const res = await request(app).get("/api/reviews").expect(200);
-        expect(res.body.reviews).toBeSortedBy("created_at");
-
-        const res2 = await request(app)
-          .get("/api/reviews?order=asc")
-          .expect(200);
-        expect(res2.body.reviews).toBeSortedBy("created_at");
-      });
-      test("200: sorts by descending when passed DESC", async () => {
-        const res = await request(app)
-          .get("/api/reviews?order=desc")
-          .expect(200);
-        expect(res.body.reviews).toBeSortedBy("created_at", {
-          descending: true,
+      describe("accepts sort_by queries", () => {
+        test("200: sorts by date by default", async () => {
+          const res = await request(app).get("/api/reviews").expect(200);
+          expect(res.body.reviews).toBeSortedBy("created_at", {
+            descending: true,
+          });
         });
-
-        const res2 = await request(app)
-          .get("/api/reviews?sort_by=votes&order=desc")
-          .expect(200);
-        expect(res2.body.reviews).toBeSortedBy("votes", { descending: true });
-      });
-      test('400: returns "Bad request" if not queried with ASC or DESC', async () => {
-        const res = await request(app)
-          .get("/api/reviews?order=azsdxcfgvbhnjmk")
-          .expect(400);
-        expect(res.body.msg).toBe("Not a valid order");
-      });
-    });
-    describe("accepts category filter queries", () => {
-      test("200: returns an object of games with only the category queried", async () => {
-        const res = await request(app)
-          .get("/api/reviews?category=dexterity")
-          .expect(200);
-        res.body.reviews.forEach((review) => {
-          expect(review.category).toBe("dexterity");
+        test("200: sorts by other columns if passed a query", async () => {
+          const res = await request(app)
+            .get("/api/reviews?sort_by=votes")
+            .expect(200);
+          expect(res.body.reviews).toBeSortedBy("votes", { descending: true});
+        });
+        test('400: returns "Bad request" if queried with a column that does not exist', async () => {
+          const res = await request(app)
+            .get("/api/reviews?sort_by=not_a_column")
+            .expect(400);
+          expect(res.body.msg).toBe("Bad request");
         });
       });
-      test('404: returns "Not found" if queried with a category that does not exist', async () => {
-        const res = await request(app)
-          .get("/api/reviews?category=asrtyu")
-          .expect(404);
-        expect(res.body.msg).toBe("Not found");
+      describe("accepts order queries", () => {
+        test("200: sorts by descending by default or when passed DESC", async () => {
+          const res = await request(app).get("/api/reviews").expect(200);
+          expect(res.body.reviews).toBeSortedBy("created_at", {
+            descending: true,
+          });
+
+          const res2 = await request(app)
+            .get("/api/reviews?order=desc")
+            .expect(200);
+          expect(res2.body.reviews).toBeSortedBy("created_at", {
+            descending: true,
+          });
+        });
+        test("200: sorts by descending when passed ASC", async () => {
+          const res = await request(app)
+            .get("/api/reviews?order=asc")
+            .expect(200);
+          expect(res.body.reviews).toBeSortedBy("created_at");
+
+          const res2 = await request(app)
+            .get("/api/reviews?sort_by=votes&order=desc")
+            .expect(200);
+          expect(res2.body.reviews).toBeSortedBy("votes", { descending: true });
+        });
+        test('400: returns "Bad request" if not queried with ASC or DESC', async () => {
+          const res = await request(app)
+            .get("/api/reviews?order=azsdxcfgvbhnjmk")
+            .expect(400);
+          expect(res.body.msg).toBe("Not a valid order");
+        });
       });
-      test('404: returns "Not found" if queried with a category that exists but doesn\'t have any reviews', async () => {
-        const res = await request(app)
-          .get("/api/reviews?category=children's games")
-          .expect(404);
-        expect(res.body.msg).toBe("Not found");
+      describe("accepts category filter queries", () => {
+        test("200: returns an object of games with only the category queried", async () => {
+          const res = await request(app)
+            .get("/api/reviews?category=dexterity")
+            .expect(200);
+          res.body.reviews.forEach((review) => {
+            expect(review.category).toBe("dexterity");
+          });
+        });
+        test('404: returns "Not found" if queried with a category that does not exist', async () => {
+          const res = await request(app)
+            .get("/api/reviews?category=asrtyu")
+            .expect(404);
+          expect(res.body.msg).toBe("Not found");
+        });
+        test('200: returns an empty array if queried with a category that exists but doesn\'t have any reviews', async () => {
+          const res = await request(app)
+            .get("/api/reviews?category=children's games")
+            .expect(200);
+          expect(res.body.reviews).toEqual([]);
+        });
       });
     });
   });
