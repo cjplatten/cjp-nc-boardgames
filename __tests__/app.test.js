@@ -44,7 +44,7 @@ describe("/api", () => {
       });
     });
   });
-  describe.only("/reviews", () => {
+  describe("/reviews", () => {
     describe("GET", () => {
       test("200: responds with an array of review objects with the properties owner, title, review_id, review_body, designer, review_img_url, category, created_at, votes, comment_count", async () => {
         const res = await request(app).get("/api/reviews").expect(200);
@@ -283,16 +283,22 @@ describe("/api", () => {
             .expect(404);
           expect(res.body.msg).toBe("Not found");
         });
+        test('200: returns an empty array if queried with a review id that exists but doesn\'t have any comments', async () => {
+          const res = await request(app)
+            .get("/api/reviews/1/comments")
+            .expect(200);
+          expect(res.body.comments).toEqual([]);
+        });
       });
       describe("POST", () => {
-        test("200: accepts an object with the properties username and body, adds this to comments table and returns a comment object with the properties comment_id, votes, created_at, author, body", async () => {
+        test("201: accepts an object with the properties username and body, adds this to comments table and returns a comment object with the properties comment_id, votes, created_at, author, body", async () => {
           const res = await request(app)
             .post("/api/reviews/3/comments")
             .send({
               username: "philippaclaire9",
               body: "wow what a great opinion",
             })
-            .expect(200);
+            .expect(201);
 
           expect(res.body.comment).toMatchObject({
             comment_id: 7,
@@ -307,12 +313,40 @@ describe("/api", () => {
             .expect(200);
           expect(commentCountCheck.body.review.comment_count).toBe(4);
         });
+        test("201: ignores unnecessary properties", async () => {
+          const res = await request(app)
+            .post("/api/reviews/3/comments")
+            .send({
+              username: "philippaclaire9",
+              body: "wow what a great opinion",
+              notAProperty: "asxdcftvgybhunjikm"
+            })
+            .expect(201);
+
+          expect(res.body.comment).toMatchObject({
+            comment_id: 7,
+            votes: 0,
+            created_at: expect.any(String),
+            author: "philippaclaire9",
+            body: "wow what a great opinion",
+          });
+        });
         test('400: responds with "Bad request" if passed a review id that isn\'t a number', async () => {
           const res = await request(app)
             .post("/api/reviews/invalid/comments")
             .send({
               username: "philippaclaire9",
               body: "wow what a great opinion",
+            })
+            .expect(400);
+          expect(res.body.msg).toBe("Bad request");
+        });
+        test('400: responds with "Bad request" if required fields are missing', async () => {
+          const res = await request(app)
+            .post("/api/reviews/3/comments")
+            .send({
+              property1: "philippaclaire9",
+              property2: "wow what a great opinion",
             })
             .expect(400);
           expect(res.body.msg).toBe("Bad request");

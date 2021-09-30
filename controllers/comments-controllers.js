@@ -19,7 +19,7 @@ exports.postCommentToReview = async (req, res, next) => {
     const { review_id } = req.params;
     const { username, body } = req.body;
     const comment = await addCommentToReview(review_id, username, body);
-    return res.status(200).send({ comment });
+    return res.status(201).send({ comment });
   } catch (err) {
     next(err);
   }
