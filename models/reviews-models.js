@@ -1,9 +1,25 @@
 const db = require("../db/connection.js");
 const { countCommentsByReview } = require("../db/utils/data-manipulation.js");
 
-exports.fetchAllReviews = async ( sort_by = "created_at", order = "DESC", category ) => {
+exports.fetchAllReviews = async (
+  sort_by = "created_at",
+  order = "DESC",
+  category
+) => {
+  const validColumns = [
+    "review_id",
+    "title",
+    "designer",
+    "votes",
+    "category",
+    "owner",
+    "created_at",
+  ];
+  if (!validColumns.includes(sort_by)) {
+    return Promise.reject({ status: 400, msg: "Bad request" });
+  }
   if (order.toUpperCase() !== "DESC" && order.toUpperCase() !== "ASC") {
-    return Promise.reject({ status: 400, msg: "Not a valid order" });
+    return Promise.reject({ status: 400, msg: "Bad request" });
   }
 
   let queryStr = `SELECT * FROM reviews`;
@@ -19,8 +35,12 @@ exports.fetchAllReviews = async ( sort_by = "created_at", order = "DESC", catego
     : await db.query(queryStr);
 
   if (fetchedReviews.rows.length === 0) {
-    const categoryExists = await db.query(`SELECT * FROM categories WHERE slug = $1`, [category])
-    if (categoryExists.rows.length === 0) return Promise.reject({ status: 404, msg: "Not found" });
+    const categoryExists = await db.query(
+      `SELECT * FROM categories WHERE slug = $1`,
+      [category]
+    );
+    if (categoryExists.rows.length === 0)
+      return Promise.reject({ status: 404, msg: "Not found" });
   }
 
   const fetchReviewsPromises = fetchedReviews.rows.map(async (review) => {

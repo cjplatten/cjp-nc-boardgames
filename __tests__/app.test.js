@@ -75,7 +75,7 @@ describe("/api", () => {
           const res = await request(app)
             .get("/api/reviews?sort_by=votes")
             .expect(200);
-          expect(res.body.reviews).toBeSortedBy("votes", { descending: true});
+          expect(res.body.reviews).toBeSortedBy("votes", { descending: true });
         });
         test('400: returns "Bad request" if queried with a column that does not exist', async () => {
           const res = await request(app)
@@ -113,7 +113,7 @@ describe("/api", () => {
           const res = await request(app)
             .get("/api/reviews?order=azsdxcfgvbhnjmk")
             .expect(400);
-          expect(res.body.msg).toBe("Not a valid order");
+          expect(res.body.msg).toBe("Bad request");
         });
       });
       describe("accepts category filter queries", () => {
@@ -131,12 +131,28 @@ describe("/api", () => {
             .expect(404);
           expect(res.body.msg).toBe("Not found");
         });
-        test('200: returns an empty array if queried with a category that exists but doesn\'t have any reviews', async () => {
+        test("200: returns an empty array if queried with a category that exists but doesn't have any reviews", async () => {
           const res = await request(app)
             .get("/api/reviews?category=children's games")
             .expect(200);
           expect(res.body.reviews).toEqual([]);
         });
+      });
+      test("only takes valid sort_by, order and category queries", async () => {
+        const res = await request(app)
+          .get("/api/reviews?sort_by=SELECT * FROM reviews")
+          .expect(400);
+        expect(res.body.msg).toBe("Bad request");
+
+        const res2 = await request(app)
+          .get("/api/reviews?order=SELECT * FROM reviews")
+          .expect(400);
+        expect(res2.body.msg).toBe("Bad request");
+
+        const res3 = await request(app)
+          .get("/api/reviews?category=SELECT * FROM reviews")
+          .expect(404);
+        expect(res3.body.msg).toBe("Not found");
       });
     });
   });
@@ -283,7 +299,7 @@ describe("/api", () => {
             .expect(404);
           expect(res.body.msg).toBe("Not found");
         });
-        test('200: returns an empty array if queried with a review id that exists but doesn\'t have any comments', async () => {
+        test("200: returns an empty array if queried with a review id that exists but doesn't have any comments", async () => {
           const res = await request(app)
             .get("/api/reviews/1/comments")
             .expect(200);
@@ -319,7 +335,7 @@ describe("/api", () => {
             .send({
               username: "philippaclaire9",
               body: "wow what a great opinion",
-              notAProperty: "asxdcftvgybhunjikm"
+              notAProperty: "asxdcftvgybhunjikm",
             })
             .expect(201);
 
@@ -405,6 +421,17 @@ describe("/api", () => {
           });
         });
       });
+    });
+  });
+  describe("/api/users/:username", () => {
+    describe("GET", () => {
+      test("200: responds with a single user object with the properties ", async () => {
+        const res = await request(app)
+        .get("/api/users/:username")
+        .expect(200);
+        
+      });
+      test("404: ", () => {});
     });
   });
 });
